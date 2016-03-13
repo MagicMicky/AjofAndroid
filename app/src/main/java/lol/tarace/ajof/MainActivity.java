@@ -1,23 +1,26 @@
 package lol.tarace.ajof;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import lol.tarace.ajof.utils.ItemClickSupport;
 
+public class MainActivity extends AppCompatActivity {
+    private AjofPlayer mAjofPlayer;
+    private int lastPlayed = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
         AjofElementsAdapter adapter = new AjofElementsAdapter(myDataset);
         rv.setAdapter(adapter);
 
+        //Create the MediaPlayer and play wololo when oppening the app
+        mAjofPlayer = new AjofPlayer(myDataset, this);
+        mAjofPlayer.initialize();
+        ItemClickSupport.addTo(rv).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) throws IOException {
+                mAjofPlayer.play(position);
+                lastPlayed=position;
+                Snackbar.make(v, myDataset.get(position), Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -50,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        this.mAjofPlayer.stop();
+        super.onPause();
+
     }
 
     @Override
