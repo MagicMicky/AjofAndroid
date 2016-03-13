@@ -18,19 +18,22 @@ public class AjofSender {
     }
 
 
-    public void send(String ajofAssetName) {
+    public void send(String ajofAssetName, boolean isPicking) {
         String mimeType = "audio/mpeg";
         Uri contentUri = Uri.parse("android.resource://lol.tarace.ajof/raw/"+ajofAssetName);
         // contentUri points to the content being shared to Messenger
         ShareToMessengerParams shareToMessengerParams =
-                ShareToMessengerParams.newBuilder(contentUri, mimeType)
-                        .build();
+            ShareToMessengerParams.newBuilder(contentUri, mimeType).build();
 
-        // Sharing from an Activity
-        MessengerUtils.shareToMessenger(
+        if(isPicking) {
+            MessengerUtils.finishShareToMessenger(mContext, shareToMessengerParams);
+        } else {
+            // Sharing from an Activity
+            MessengerUtils.shareToMessenger(
                 mContext,
                 REQUEST_CODE_SHARE_TO_MESSENGER,
                 shareToMessengerParams);
+        }
 
     }
 

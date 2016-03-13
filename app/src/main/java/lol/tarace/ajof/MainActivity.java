@@ -1,5 +1,6 @@
 package lol.tarace.ajof;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private int lastPlayed = -1;
     private AjofElementsAdapter mAdapter;
     private AjofSender mSender;
-
+    private boolean mPicking = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         mSender = new AjofSender(this);
 
+        if(Intent.ACTION_PICK.equals(getIntent().getAction())) {
+            this.mPicking=true;
+        }
+
         ItemClickSupport.addTo(rv).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) throws IOException {
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.messenger_send_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSender.send(myDataset.get(lastPlayed));
+                mSender.send(myDataset.get(lastPlayed), mPicking);
             }
         });
     }
