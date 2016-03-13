@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -83,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -92,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         this.mAjofPlayer.stop();
+        AppEventsLogger.deactivateApp(this);
         super.onPause();
+
 
     }
 
