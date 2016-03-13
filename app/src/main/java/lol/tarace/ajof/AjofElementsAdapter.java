@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AjofElementsAdapter extends RecyclerView.Adapter<AjofElementsAdapter.ViewHolder> {
     private List<String> mDataset;
-
+    private int mSelected = -1;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -49,6 +49,11 @@ public class AjofElementsAdapter extends RecyclerView.Adapter<AjofElementsAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        if(this.mSelected == position)
+            holder.mTextView.setTextColor(holder.mTextView.getResources().getColor(R.color.colorAccent));
+        else {
+            holder.mTextView.setTextColor(holder.mTextView.getResources().getColor(android.R.color.secondary_text_light));
+        }
         holder.mTextView.setText(mDataset.get(position));
 
     }
@@ -57,5 +62,12 @@ public class AjofElementsAdapter extends RecyclerView.Adapter<AjofElementsAdapte
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void setSelected(int position) {
+        int old = mSelected;
+        this.mSelected = position;
+        this.notifyItemChanged(old);
+        this.notifyItemChanged(position);
     }
 }

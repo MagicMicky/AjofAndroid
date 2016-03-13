@@ -21,6 +21,7 @@ import lol.tarace.ajof.utils.ItemClickSupport;
 public class MainActivity extends AppCompatActivity {
     private AjofPlayer mAjofPlayer;
     private int lastPlayed = -1;
+    private AjofElementsAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
 
-        AjofElementsAdapter adapter = new AjofElementsAdapter(myDataset);
-        rv.setAdapter(adapter);
+        mAdapter = new AjofElementsAdapter(myDataset);
+        rv.setAdapter(mAdapter);
 
         //Create the MediaPlayer and play wololo when oppening the app
         mAjofPlayer = new AjofPlayer(myDataset, this);
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClicked(RecyclerView recyclerView, int position, View v) throws IOException {
                 mAjofPlayer.play(position);
                 lastPlayed=position;
+                mAdapter.setSelected(position);
                 Snackbar.make(v, myDataset.get(position), Snackbar.LENGTH_SHORT).show();
             }
         });
