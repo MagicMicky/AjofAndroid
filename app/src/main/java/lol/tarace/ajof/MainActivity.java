@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,9 +24,13 @@ public class MainActivity extends AppCompatActivity {
     private AjofPlayer mAjofPlayer;
     private int lastPlayed = -1;
     private AjofElementsAdapter mAdapter;
+    private AjofSender mSender;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //need to initialize facebook sdk
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         //Retrieve assets from
         Field[] fields=R.raw.class.getFields();
@@ -50,13 +56,23 @@ public class MainActivity extends AppCompatActivity {
         //Create the MediaPlayer and play wololo when oppening the app
         mAjofPlayer = new AjofPlayer(myDataset, this);
         mAjofPlayer.initialize();
+
+        mSender = new AjofSender(this);
+
         ItemClickSupport.addTo(rv).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) throws IOException {
                 mAjofPlayer.play(position);
-                lastPlayed=position;
+                lastPlayed = position;
                 mAdapter.setSelected(position);
                 Snackbar.make(v, myDataset.get(position), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.messenger_send_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSender.send(myDataset.get(lastPlayed));
             }
         });
     }

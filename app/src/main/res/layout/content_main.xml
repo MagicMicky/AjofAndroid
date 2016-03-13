@@ -16,5 +16,15 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
+        <!-- Include this in your layout -->
+        <include layout="@layout/messenger_button_send_white_round" />
+
+    </LinearLayout>
 
 </RelativeLayout>

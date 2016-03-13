@@ -50,7 +50,7 @@ public class AjofElementsAdapter extends RecyclerView.Adapter<AjofElementsAdapte
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         if(this.mSelected == position)
-            holder.mTextView.setTextColor(holder.mTextView.getResources().getColor(R.color.colorAccent));
+            holder.mTextView.setTextColor(holder.mTextView.getResources().getColor(R.color.com_facebook_messenger_blue));
         else {
             holder.mTextView.setTextColor(holder.mTextView.getResources().getColor(android.R.color.secondary_text_light));
         }
